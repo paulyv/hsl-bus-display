@@ -272,6 +272,6 @@ export const timetable_sundays = [
                   {line: '111', destination: 'Hyljelahti via Tapiola (M)', time: '23:03'},
                   {line: '113', destination: 'Tapiola (M)', time: '23:16'},
                   {line: '111', destination: 'Hyljelahti via Tapiola (M)', time: '23:33'},
-                  {line: '113', destination: 'Tapiola (M)', time: '22:47'},
+                  {line: '113', destination: 'Tapiola (M)', time: '23:47'},
 
 ];
