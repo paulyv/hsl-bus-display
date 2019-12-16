@@ -4,8 +4,6 @@ import './App.css';
 import {timetable_weekdays, timetable_saturdays, timetable_sundays} from './timetable';
 
 
-
-
 class App extends Component {
   constructor(props) {
   super(props);
@@ -25,87 +23,52 @@ componentDidMount() {
   },1000)
 }
 
+parseSchelude = (schedule) => {
+  let _this = this;
+  let busses = '';
+  let counter = 0;
+
+  busses = schedule.map((item, key) => {
+  if(moment(item.time, 'HH:mm').isAfter()) {
+    let item_time = moment(item.time, 'HH:mm');
+    let current_time = moment(_this.state.currentTime ,"HH:mm");
+    let dur = moment.duration(item_time.diff(current_time));
+    let mins = (dur.hours() * 60) + dur.minutes();
+    if(Number(mins) < 20 || counter < 5) {
+      counter++;
+      if(Number(mins) < 20) {
+        return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
+      }
+        return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{item.time}</div></>
+    }
+  } else {
+    return '';
+  }
+})
+  return busses;
+}
+
 render() {
 let _this = this;
 
   const Buslines = function() {
-
     let current_time = moment(_this.state.currentTime ,"HH:mm");
-    let day = current_time.day();
-    let busses = '';
-    let counter = 0;
+    let weekday = current_time.day();
+
     // SUNDAY
-    if(day === 0) {
-          busses = timetable_sundays.map((item, key) => {
-          if(moment(item.time, 'HH:mm').isAfter()) {
-
-            let item_time = moment(item.time, 'HH:mm');
-            let current_time = moment(_this.state.currentTime ,"HH:mm");
-            let dur = moment.duration(item_time.diff(current_time));
-            let mins = (dur.hours() * 60) + dur.minutes();
-            if(Number(mins) < 20 || counter < 5) {
-              counter++;
-              if(Number(mins) < 20) {
-                return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
-              }
-                return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{item.time}</div></>
-            }
-          } else {
-            return '';
-          }
-        })
-    return busses;
+    if(weekday === 0) {
+      return _this.parseSchelude(timetable_sundays);
     }
-
     // WEEKDAYs
-    if((day > 0) && (day <= 5)) {
-      let counter = 0;
-      busses = timetable_weekdays.map((item, key) => {
-      if(moment(item.time, 'HH:mm').isAfter()) {
-
-        let item_time = moment(item.time, 'HH:mm');
-        let current_time = moment(_this.state.currentTime ,"HH:mm");
-        let dur = moment.duration(item_time.diff(current_time));
-        let mins = (dur.hours() * 60) + dur.minutes();
-        if(Number(mins) < 20 || counter < 5) {
-          counter++;
-          if(Number(mins) < 20) {
-            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
-          }
-            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{item.time}</div></>
-        }
-      } else {
-        return '';
-      }
-    })
-      return busses;
+    if((weekday > 0) && (weekday <= 5)) {
+      return _this.parseSchelude(timetable_weekdays);
     }
-
     // SATURDAY
-    if(day === 6 ) {
-      busses = timetable_saturdays.map((item, key) => {
-      if(moment(item.time, 'HH:mm').isAfter()) {
-        let counter = 0;
-        let item_time = moment(item.time, 'HH:mm');
-        let current_time = moment(_this.state.currentTime ,"HH:mm");
-        let dur = moment.duration(item_time.diff(current_time));
-        let mins = (dur.hours() * 60) + dur.minutes();
-        if(Number(mins) < 20 || counter < 5) {
-          counter++;
-          if(Number(mins) < 20) {
-            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
-          }
-            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{item.time}</div></>
-        }
-      } else {
-        return '';
-      }
-    })
-      return busses;
+    if(weekday === 6 ) {
+      return _this.parseSchelude(timetable_saturdays);
     }
-
     return '';
-}
+  }
 
   return (
     <div className="whole-page-wrapper">
