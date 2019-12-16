@@ -4,23 +4,45 @@ import './App.css';
 import {timetable_weekdays, timetable_saturdays, timetable_sundays} from './timetable';
 
 
+
 class App extends Component {
   constructor(props) {
   super(props);
-  this.state = {};
+  this.state = {schedule: []};
 
 }
 
 componentDidMount() {
+  let _this = this;
   this.setState({
     currentTime : moment()
   })
+
+  this.fetchSchedule('http://localhost:3000/json/schedule.json');
 
   setInterval( () => {
     this.setState({
       currentTime : moment()
     })
   },1000)
+
+  setInterval( () => {
+    this.fetchSchedule('http://localhost:3000/json/schedule.json');
+  },100000)
+}
+
+fetchSchedule = (url) => {
+  fetch(url, {
+  mode: 'cors',
+  headers: {
+    'Access-Control-Allow-Origin':'*'
+  }
+})
+    .then((res) => res.json())
+    .then((data) => {
+      this.setState({schedule: data});
+      console.log('data:', data);
+    })
 }
 
 parseSchelude = (schedule) => {
@@ -52,22 +74,7 @@ render() {
 let _this = this;
 
   const Buslines = function() {
-    let current_time = moment(_this.state.currentTime ,"HH:mm");
-    let weekday = current_time.day();
-
-    // SUNDAY
-    if(weekday === 0) {
-      return _this.parseSchelude(timetable_sundays);
-    }
-    // WEEKDAYs
-    if((weekday > 0) && (weekday <= 5)) {
-      return _this.parseSchelude(timetable_weekdays);
-    }
-    // SATURDAY
-    if(weekday === 6 ) {
-      return _this.parseSchelude(timetable_saturdays);
-    }
-    return '';
+    return _this.parseSchelude(_this.state.schedule);
   }
 
   return (

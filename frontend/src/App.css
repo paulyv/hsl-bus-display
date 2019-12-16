@@ -76,6 +76,8 @@ body {
   border-bottom: 5px solid white;
   text-align: left;
   font-size: 150%;
+  margin-bottom: 15px;
+
 }
 .bus-destination-title {
   color: white;
@@ -86,6 +88,8 @@ body {
   border-bottom: 5px solid white;
   text-align: left;
   font-size: 150%;
+  margin-bottom: 15px;
+
 }
 .bus-arrival-title {
   color: white;
@@ -97,6 +101,8 @@ body {
   border-bottom: 5px solid white;
   text-align: right;
   font-size: 150%;
+  margin-bottom: 15px;
+
 }
 
 .bus-number {
