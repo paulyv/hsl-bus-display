@@ -33,9 +33,9 @@ let _this = this;
     let current_time = moment(_this.state.currentTime ,"HH:mm");
     let day = current_time.day();
     let busses = '';
-
+    let counter = 0;
     // SUNDAY
-    if(day == 0) {
+    if(day === 0) {
           busses = timetable_sundays.map((item, key) => {
           if(moment(item.time, 'HH:mm').isAfter()) {
 
@@ -43,8 +43,12 @@ let _this = this;
             let current_time = moment(_this.state.currentTime ,"HH:mm");
             let dur = moment.duration(item_time.diff(current_time));
             let mins = (dur.hours() * 60) + dur.minutes();
-            if(Number(mins) < 20) {
-              return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
+            if(Number(mins) < 20 || counter < 5) {
+              counter++;
+              if(Number(mins) < 20) {
+                return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
+              }
+                return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{item.time}</div></>
             }
           } else {
             return '';
@@ -54,16 +58,21 @@ let _this = this;
     }
 
     // WEEKDAYs
-    if(day > 0 && day <= 5 ) {
-      busses = timetable_sundays.map((item, key) => {
+    if((day > 0) && (day <= 5)) {
+      let counter = 0;
+      busses = timetable_weekdays.map((item, key) => {
       if(moment(item.time, 'HH:mm').isAfter()) {
 
         let item_time = moment(item.time, 'HH:mm');
         let current_time = moment(_this.state.currentTime ,"HH:mm");
         let dur = moment.duration(item_time.diff(current_time));
         let mins = (dur.hours() * 60) + dur.minutes();
-        if(Number(mins) < 20) {
-          return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
+        if(Number(mins) < 20 || counter < 5) {
+          counter++;
+          if(Number(mins) < 20) {
+            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
+          }
+            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{item.time}</div></>
         }
       } else {
         return '';
@@ -73,16 +82,20 @@ let _this = this;
     }
 
     // SATURDAY
-    if(day == 6 ) {
-      busses = timetable_sundays.map((item, key) => {
+    if(day === 6 ) {
+      busses = timetable_saturdays.map((item, key) => {
       if(moment(item.time, 'HH:mm').isAfter()) {
-
+        let counter = 0;
         let item_time = moment(item.time, 'HH:mm');
         let current_time = moment(_this.state.currentTime ,"HH:mm");
         let dur = moment.duration(item_time.diff(current_time));
         let mins = (dur.hours() * 60) + dur.minutes();
-        if(Number(mins) < 20) {
-          return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
+        if(Number(mins) < 20 || counter < 5) {
+          counter++;
+          if(Number(mins) < 20) {
+            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
+          }
+            return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{item.time}</div></>
         }
       } else {
         return '';
@@ -94,28 +107,11 @@ let _this = this;
     return '';
 }
 
-  const busses = timetable_weekdays.map((item, key) => {
-
-    if(moment(item.time, 'HH:mm').isAfter()) {
-
-      let item_time = moment(item.time, 'HH:mm');
-      let current_time = moment(this.state.currentTime ,"HH:mm");
-      let dur = moment.duration(item_time.diff(current_time));
-      let mins = (dur.hours() * 60) + dur.minutes();
-      if(Number(mins) < 20) {
-          return <><div className="bus-number">{item.line}</div> <div className="bus-destination">{item.destination}</div> <div className="bus-arrival">{mins}</div></>
-      }
-    } else {
-      return '';
-    }
-}
-);
-
   return (
     <div className="whole-page-wrapper">
 
       <div className="top-section-left">
-        <img src="./hsl-logo.png"></img>
+        <img src="./hsl-logo.png" alt="hsl-logo"></img>
       </div>
       <div className="top-fill-middle"></div>
       <div className="top-section-right">
